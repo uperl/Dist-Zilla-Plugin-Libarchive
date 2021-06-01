@@ -3,6 +3,6 @@
 set -ex
 
 cip sudo apt-get update
-cip sudo apt-get install git
+cip sudo apt-get install git liblzo2-dev nettle-dev libarchive-dev libffi-dev
 
-cip exec ./maint/cip-before-install-innner
+cip exec ./maint/cip-before-install-inner
