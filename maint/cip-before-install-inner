@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -ex
+
+git clone git@github.com:plicease-pr/Dist-Zilla.git
+cd Dist-Zilla
+git checkout graham/archiver 
+cpanm -n Dist::Zilla
+dzil authordeps | cpanm -n
+dzil install
+

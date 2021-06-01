@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -ex
+
+cip sudo apt-get update
+cip sudo apt-get install git
+
+cip exec ./maint/cip-before-install-innner
