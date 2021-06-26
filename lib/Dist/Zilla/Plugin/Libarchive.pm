@@ -24,7 +24,7 @@ package Dist::Zilla::Plugin::Libarchive {
     default  => 'tar.gz',
   );
 
-  sub build_archive ($self, $archive_basename, $built_in, $basename, $basedir)
+  sub build_archive ($self, $archive_basename, $built_in, $basedir)
   {
     my $w = Archive::Libarchive::ArchiveWrite->new;
 
