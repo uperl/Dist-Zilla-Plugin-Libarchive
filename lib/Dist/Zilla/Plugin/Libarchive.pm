@@ -14,7 +14,6 @@ package Dist::Zilla::Plugin::Libarchive {
   # ABSTRACT: Create dist archives using Archive::Libarchive
 
   with 'Dist::Zilla::Role::ArchiveBuilder';
-  with 'Dist::Zilla::Role::ArchiveNamer';
 
   enum ArchiveFormat => [qw/ tar.gz zip /];
 
@@ -25,11 +24,11 @@ package Dist::Zilla::Plugin::Libarchive {
     default  => 'tar.gz',
   );
 
-  sub build_archive ($self, $filename, $built_in, $basename, $basedir)
+  sub build_archive ($self, $archive_basename, $built_in, $basename, $basedir)
   {
     my $w = Archive::Libarchive::ArchiveWrite->new;
 
-    my $archive_path = Path::Tiny->new($filename);
+    my $archive_path = Path::Tiny->new(join '.', $archive_basename, $self->format);
 
     if($self->format eq 'tar.gz')
     {
@@ -59,18 +58,6 @@ package Dist::Zilla::Plugin::Libarchive {
     $w->close;
 
     return $archive_path;
-  }
-
-  sub archive_filename ($self, $name)
-  {
-    if($self->format eq 'zip')
-    {
-      return $name . ".zip";
-    }
-    else
-    {
-      return undef;
-    }
   }
 
   __PACKAGE__->meta->make_immutable;
