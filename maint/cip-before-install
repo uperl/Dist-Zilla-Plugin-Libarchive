@@ -4,4 +4,5 @@ set -ex
 
 cip sudo apt-get update
 cip sudo apt-get install git liblzo2-dev nettle-dev libarchive-dev libffi-dev
-cip exec cpanm -v https://dist.wdlabs.com/Software-License-0.104001.tar.gz
+cip exec cpanm -n https://dist.wdlabs.com/Software-License-0.104001.tar.gz
+cip exec cpanm -n https://dist.wdlabs.com/Dist-Zilla-Plugin-Libarchive-0.01.tar.gz
