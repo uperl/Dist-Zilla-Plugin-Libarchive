@@ -9,7 +9,7 @@ package Dist::Zilla::Plugin::Libarchive {
   use Path::Tiny ();
   use Moose::Util::TypeConstraints;
   use namespace::autoclean;
-  use experimental qw( signatures );
+  use experimental qw( signatures postderef );
 
   # ABSTRACT: Create dist archives using Archive::Libarchive
 
