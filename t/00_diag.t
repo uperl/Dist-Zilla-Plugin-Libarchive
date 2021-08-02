@@ -11,6 +11,7 @@ my $post_diag;
 
 $modules{$_} = $_ for qw(
   Archive::Libarchive
+  Dist::Zilla
   Dist::Zilla::Role::ArchiveBuilder
   ExtUtils::MakeMaker
   Moose
