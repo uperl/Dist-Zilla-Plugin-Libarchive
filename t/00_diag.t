@@ -11,6 +11,7 @@ my $post_diag;
 
 $modules{$_} = $_ for qw(
   Archive::Libarchive
+  Archive::Zip
   Dist::Zilla
   Dist::Zilla::Role::ArchiveBuilder
   ExtUtils::MakeMaker
@@ -18,6 +19,7 @@ $modules{$_} = $_ for qw(
   Moose::Util::TypeConstraints
   Path::Tiny
   Test2::V0
+  Test::DZil
   namespace::autoclean
 );
 
