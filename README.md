@@ -1,4 +1,4 @@
-# Dist::Zilla::Plugin::Libarchive ![linux](https://github.com/uperl/Dist-Zilla-Plugin-Libarchive/workflows/linux/badge.svg)
+# Dist::Zilla::Plugin::Libarchive ![static](https://github.com/uperl/Dist-Zilla-Plugin-Libarchive/workflows/static/badge.svg) ![linux](https://github.com/uperl/Dist-Zilla-Plugin-Libarchive/workflows/linux/badge.svg)
 
 Create dist archives using Archive::Libarchive
 
