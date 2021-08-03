@@ -73,6 +73,8 @@ carefully before not using the default.  Supported formats:
 
 =item L<Dist::Zilla>
 
+=item L<Dist::Zilla::Plugin::ArchiveTar>
+
 =item L<Dist::Zilla::Role::ArchiveBuilder>
 
 =back

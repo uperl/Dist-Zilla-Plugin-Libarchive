@@ -52,6 +52,7 @@ carefully before not using the default.  Supported formats:
 
 - [Archive::Libarchive](https://metacpan.org/pod/Archive::Libarchive)
 - [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla)
+- [Dist::Zilla::Plugin::ArchiveTar](https://metacpan.org/pod/Dist::Zilla::Plugin::ArchiveTar)
 - [Dist::Zilla::Role::ArchiveBuilder](https://metacpan.org/pod/Dist::Zilla::Role::ArchiveBuilder)
 
 # AUTHOR
