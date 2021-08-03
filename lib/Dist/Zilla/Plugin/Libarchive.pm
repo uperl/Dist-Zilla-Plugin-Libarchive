@@ -130,10 +130,12 @@ carefully before not using the default.  Supported formats:
     my %dirs;
 
     my $e = Archive::Libarchive::Entry->new;
+    $e->set_mtime(time);
+    $e->set_uname('root');
+    $e->set_gname('root');
 
     my $verbose = $VERBOSE || $self->zilla->logger->get_debug;
 
-    my $time = time;
     foreach my $distfile (sort { $a->name cmp $b->name } $self->zilla->files->@*)
     {
       {
@@ -152,7 +154,6 @@ carefully before not using the default.  Supported formats:
           $e->set_size(0);
           $e->set_filetype('dir');
           $e->set_perm( oct('0755') );
-          $e->set_mtime($time);
 
           $ret = $w->write_header($e);
           $self->_check_ret($ret);
@@ -164,7 +165,6 @@ carefully before not using the default.  Supported formats:
       $e->set_size(-s $built_in->child($distfile->name));
       $e->set_filetype('reg');
       $e->set_perm( oct('0644') );
-      $e->set_mtime($time);
 
       $ret = $w->write_header($e);
       $self->_check_ret($ret);
