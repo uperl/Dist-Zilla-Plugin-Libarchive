@@ -13,9 +13,75 @@ package Dist::Zilla::Plugin::Libarchive {
 
   # ABSTRACT: Create dist archives using Archive::Libarchive
 
+=head1 SYNOPSIS
+
+In your C<dist.ini>
+
+ [Libarchive]
+
+=head1 DESCRIPTION
+
+This L<Dist::Zilla> plugin overrides the built in archive builder and uses C<libarchive> via L<Archive::Libarchive>
+instead.  It is different from the built in version in these ways:
+
+=over 4
+
+=item Predictable
+
+The built in behavior will sometimes use L<Archive::Tar> or L<Archive::Tar::Wrapper>.  The problem with L<Archive::Tar::Wrapper>
+is that it depends on the system implementation of tar, which in some cases can produce archives that are not readable by older
+implementations of tar.  In particular GNU tar which is typically the default on Linux systems includes unnecessary features that
+break tar on HP-UX.  (You should probably be getting off HP-UX if you are still using it in 2021 as I write this).
+
+=item Sorted by name
+
+The contents of the archive are sorted by name instead of being sorted by filename length.  While sorting by length makes for
+a pretty display when they are unpacked, I find it harder to find stuff when the content is listed.
+
+=item Additional formats
+
+Because C<libarchive> supports a large number of formats, this plugin can be extended to support them as well.  Currently
+there is an interface to produce C<.tar>, C<.tar.gz> and C<.zip>.  Other formats may be added in the future.
+
+=back
+
+=head1 PROPERTIES
+
+=head2 format
+
+ [Libarchive]
+ format = tar.gz
+
+Sets the output format.  The default, most common and easiest to unpack for cpan clients is C<tar.gz>.  You should consider
+carefully before not using the default.  Supported formats:
+
+=over 4
+
+=item C<tar.gz>
+
+=item C<tar>
+
+=item C<zip>
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Archive::Libarchive>
+
+=item L<Dist::Zilla>
+
+=item L<Dist::Zilla::Role::ArchiveBuilder>
+
+=back
+
+=cut
+
   with 'Dist::Zilla::Role::ArchiveBuilder';
 
-  enum ArchiveFormat => [qw/ tar.gz zip /];
+  enum ArchiveFormat => [qw/ tar tar.gz zip /];
 
   has format => (
     is       => 'ro',
@@ -46,6 +112,10 @@ package Dist::Zilla::Plugin::Libarchive {
     {
       $w->set_format_pax_restricted;
       $w->add_filter_gzip;
+    }
+    elsif($self->format eq 'tar')
+    {
+      $w->set_format_pax_restricted;
     }
     elsif($self->format eq 'zip')
     {
@@ -109,5 +179,3 @@ package Dist::Zilla::Plugin::Libarchive {
 }
 
 1;
-
-
