@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}},
 
 {{$NEXT}}
+  - Exclude corpus from indexing oops (gh#7)
+  - set uname and gname to root instead of leaving them blank (gh#6, gh#7)
 
 0.02      2021-08-03 09:29:15 -0600
   - First CPAN release
