@@ -5,7 +5,7 @@ use 5.020;
 package Dist::Zilla::Plugin::Libarchive {
 
   use Moose;
-  use Archive::Libarchive;
+  use Archive::Libarchive qw( ARCHIVE_WARN );
   use Path::Tiny ();
   use Moose::Util::TypeConstraints;
   use namespace::autoclean;
@@ -24,6 +24,18 @@ package Dist::Zilla::Plugin::Libarchive {
     default  => 'tar.gz',
   );
 
+  sub _check_ret ($self, $ret)
+  {
+    if($ret == ARCHIVE_WARN)
+    {
+      $self->log($ret->error_string);
+    }
+    elsif($ret < ARCHIVE_WARN)
+    {
+      $self->log_fatal($ret->error_string);
+    }
+  }
+
   sub build_archive ($self, $archive_basename, $built_in, $basedir)
   {
     my $w = Archive::Libarchive::ArchiveWrite->new;
@@ -39,24 +51,57 @@ package Dist::Zilla::Plugin::Libarchive {
     {
       $w->set_format_zip;
     }
-    $w->open_filename("$archive_path");
+
+    my $ret = $w->open_filename("$archive_path");
+    $self->_check_ret($ret);
+
+    my %dirs;
+
+    my $e = Archive::Libarchive::Entry->new;
 
     my $time = time;
-    foreach my $distfile ($self->zilla->files->@*)
+    foreach my $distfile (sort $self->zilla->files->@*)
     {
-      my $e = Archive::Libarchive::Entry->new;
+      {
+        my @parts = split /\//, $distfile->name;
+        pop @parts;
+
+        my $dir = '';
+        foreach my $part ('', @parts)
+        {
+          $dir .= "/$part";
+          next if $dirs{$dir};
+          $dirs{$dir} = 1;
+
+          $e->set_pathname($basedir->child($dir));
+          $e->set_size(0);
+          $e->set_filetype('dir');
+          $e->set_perm( oct('0755') );
+          $e->set_mtime($time);
+
+          $ret = $w->write_header($e);
+          $self->_check_ret($ret);
+        }
+      }
+
       $e->set_pathname($basedir->child($distfile->name));
       $e->set_size(-s $built_in->child($distfile->name));
       $e->set_filetype('reg');
       $e->set_perm( oct('0644') );
       $e->set_mtime($time);
-      $w->write_header($e);
+
+      $ret = $w->write_header($e);
+      $self->_check_ret($ret);
+
       my $content = $built_in->child($distfile->name)->slurp_raw;
-      $w->write_data(\$content);
+      $ret = $w->write_data(\$content);
+      $self->_check_ret($ret);
     }
 
     $w->close;
+    $self->_check_ret($ret);
 
+    $self->log("writing archive to $archive_path");
     return $archive_path;
   }
 
