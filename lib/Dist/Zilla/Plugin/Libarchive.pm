@@ -164,7 +164,7 @@ carefully before not using the default.  Supported formats:
       $e->set_pathname($basedir->child($distfile->name));
       $e->set_size(-s $built_in->child($distfile->name));
       $e->set_filetype('reg');
-      $e->set_perm( oct('0644') );
+      $e->set_perm( -x $built_in->child($distfile->name) ? oct('0755') : oct('0644') );
 
       $ret = $w->write_header($e);
       $self->_check_ret($ret);
