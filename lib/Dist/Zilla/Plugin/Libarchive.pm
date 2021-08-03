@@ -102,6 +102,8 @@ carefully before not using the default.  Supported formats:
     }
   }
 
+  our $VERBOSE;
+
   sub build_archive ($self, $archive_basename, $built_in, $basedir)
   {
     my $w = Archive::Libarchive::ArchiveWrite->new;
@@ -129,8 +131,10 @@ carefully before not using the default.  Supported formats:
 
     my $e = Archive::Libarchive::Entry->new;
 
+    my $verbose = $VERBOSE || $self->zilla->logger->get_debug;
+
     my $time = time;
-    foreach my $distfile (sort $self->zilla->files->@*)
+    foreach my $distfile (sort { $a->name cmp $b->name } $self->zilla->files->@*)
     {
       {
         my @parts = split /\//, $distfile->name;
@@ -143,6 +147,7 @@ carefully before not using the default.  Supported formats:
           next if $dirs{$dir};
           $dirs{$dir} = 1;
 
+          $self->log("DIR  @{[ $basedir->child($dir) ]}") if $verbose;
           $e->set_pathname($basedir->child($dir));
           $e->set_size(0);
           $e->set_filetype('dir');
@@ -154,6 +159,7 @@ carefully before not using the default.  Supported formats:
         }
       }
 
+      $self->log("FILE @{[ $basedir->child($distfile->name) ]}") if $verbose;
       $e->set_pathname($basedir->child($distfile->name));
       $e->set_size(-s $built_in->child($distfile->name));
       $e->set_filetype('reg');
