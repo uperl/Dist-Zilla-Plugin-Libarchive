@@ -2,4 +2,7 @@ Dist-Zilla-Plugin-Libarchive-*
 /.build/
 *.swp
 
-
+/Dist-Zilla-Plugin-Libarchive-*
+/.build
+*.old
+*.orig
